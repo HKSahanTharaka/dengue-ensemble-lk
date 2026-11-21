@@ -1,7 +1,8 @@
-# AI-GENERATED (Claude via Antigravity)
+﻿# AI-GENERATED (Claude via Antigravity)
 """Build model-ready features for next-week dengue forecasting.
 
-Golden rule: a feature on row "week t" may only use information from weeks BEFORE t.
+Forecast setting: on row "week t" we know everything up to the END of week t (this week's cases and weather)
+and predict week t+1. So a feature may use week t and earlier, but NEVER week t+1 or later.
 Everything is built inside groupby(district) so one district never leaks into another.
 """
 import numpy as np
@@ -9,12 +10,14 @@ import pandas as pd
 
 DISTRICT, DATE, CASES = "district", "start.date", "cases"
 CLIMATE = ["rainfall_mm", "temp_max_c", "temp_min_c", "humidity_pct"]
-CASE_LAGS = [1, 2, 3, 4, 8]          # memory of past cases (weeks back)
+CASE_LAGS = [0, 1, 2, 3, 4, 8]       # memory of cases (0 = this week, 1 = last week, ...)
 ROLL_WINDOWS = [4, 8]                # rolling mean / max windows (weeks)
-CLIMATE_LAGS = range(1, 9)           # weather 1..8 weeks back
+CLIMATE_LAGS = range(0, 9)           # weather this week (0) and 1..8 weeks back
 STATIC = ["population", "population_density"]
-# Columns the audit marked as leakage risks (whole-year flag, or rescaled copies of cases)
+# Dropped: is_epidemic_year uses whole-year info; cases_zscore uses the district mean/std of ALL years (verified in notebook);
+# incidence_rate is a rescaled copy of cases. Also dropped as redundant: cases_lag1, rainfall_lag2/4 (rebuilt below).
 DROP_HIGH_RISK = ["is_epidemic_year", "incidence_rate", "cases_zscore"]
+REDUNDANT = ["cases_lag1", "rainfall_lag2", "rainfall_lag4"]
 
 
 def load_raw(path):
@@ -25,7 +28,7 @@ def load_raw(path):
 
 def build_features(raw):
     """Return (table, groups). `groups` maps a type name to its feature columns."""
-    df = raw.drop(columns=DROP_HIGH_RISK).sort_values([DISTRICT, DATE]).reset_index(drop=True)
+    df = raw.drop(columns=DROP_HIGH_RISK + REDUNDANT).sort_values([DISTRICT, DATE]).reset_index(drop=True)
     g = df.groupby(DISTRICT)
     parts, groups = {}, {}
 
@@ -38,18 +41,17 @@ def build_features(raw):
         parts[f"cases_lag_{k}"] = g[CASES].shift(k)
     groups["case lags"] = [f"cases_lag_{k}" for k in CASE_LAGS]
 
-    # 2. Rolling mean/max of PAST cases: shift(1) first so the current week is never in the window
+    # 2. Rolling mean/max of the last w weeks INCLUDING this week (never future weeks)
     for w in ROLL_WINDOWS:
-        past_g = g[CASES].shift(1).groupby(df[DISTRICT])
-        parts[f"cases_roll_mean_{w}"] = past_g.transform(lambda s: s.rolling(w).mean())
-        parts[f"cases_roll_max_{w}"] = past_g.transform(lambda s: s.rolling(w).max())
-    groups["rolling past cases"] = [f"cases_roll_{f}_{w}" for w in ROLL_WINDOWS for f in ("mean", "max")]
+        parts[f"cases_roll_mean_{w}"] = g[CASES].transform(lambda s: s.rolling(w).mean())
+        parts[f"cases_roll_max_{w}"] = g[CASES].transform(lambda s: s.rolling(w).max())
+    groups["rolling cases"] = [f"cases_roll_{f}_{w}" for w in ROLL_WINDOWS for f in ("mean", "max")]
 
-    # 3. Lagged climate (weather is not derived from cases, lags 1..8 only)
+    # 3. Climate: this week and 8 weeks back (weather is not derived from cases)
     for c in CLIMATE:
         for k in CLIMATE_LAGS:
             parts[f"{c}_lag_{k}"] = g[c].shift(k)
-    groups["lagged climate"] = [f"{c}_lag_{k}" for c in CLIMATE for k in CLIMATE_LAGS]
+    groups["climate"] = [f"{c}_lag_{k}" for c in CLIMATE for k in CLIMATE_LAGS]
 
     # 4. Seasonality from the DATE (week numbers in the file are unreliable)
     week = df[DATE].dt.isocalendar().week.astype(float).clip(upper=52)
@@ -61,8 +63,9 @@ def build_features(raw):
     groups["district and size"] = [DISTRICT] + STATIC
 
     out = pd.concat([df[[DATE, CASES, DISTRICT] + STATIC], pd.DataFrame(parts)], axis=1)
-    # Drop rows with missing lags (first 8 weeks per district) and the last week (no next week yet)
+    # Drop rows with missing lags (first 7-8 weeks per district) and the last week (no next week yet)
     features = [c for cols in groups.values() for c in cols]
     out = out.dropna(subset=["target_log"] + features).reset_index(drop=True)
     # Column order: reference columns (not model inputs), then the features
     return out[[DATE, CASES, "target_next_cases", "target_log"] + features], groups
+
