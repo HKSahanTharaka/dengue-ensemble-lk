@@ -1,4 +1,4 @@
-﻿# AI-GENERATED (Claude via Antigravity)
+# AI-GENERATED (Claude via Antigravity)
 """Base models and a manual, time-aware stacking model (sklearn's StackingRegressor cannot use TimeSeriesSplit)."""
 import numpy as np
 from catboost import CatBoostRegressor
@@ -15,13 +15,19 @@ from split import make_preprocessor
 class CatBoostDistrict(RegressorMixin, BaseEstimator):
     """Thin wrapper so scikit-learn can clone CatBoost; district is passed as a native categorical column."""
 
-    def __init__(self, iterations=500, depth=6, learning_rate=0.1, random_state=42):
-        self.iterations, self.depth, self.learning_rate, self.random_state = iterations, depth, learning_rate, random_state
+    def __init__(self, iterations=500, depth=6, learning_rate=0.1, l2_leaf_reg=3.0, random_state=42, thread_count=-1):
+        self.iterations = iterations
+        self.depth = depth
+        self.learning_rate = learning_rate
+        self.l2_leaf_reg = l2_leaf_reg
+        self.random_state = random_state
+        self.thread_count = thread_count
 
     def fit(self, X, y):
         self.model_ = CatBoostRegressor(iterations=self.iterations, depth=self.depth, learning_rate=self.learning_rate,
-                                        cat_features=["district"], random_state=self.random_state, verbose=0,
-                                        thread_count=-1, allow_writing_files=False)
+                                        l2_leaf_reg=self.l2_leaf_reg, cat_features=["district"],
+                                        random_state=self.random_state, verbose=0,
+                                        thread_count=self.thread_count, allow_writing_files=False)
         self.model_.fit(X, y)
         return self
 

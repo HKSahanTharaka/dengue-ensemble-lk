@@ -19,3 +19,4 @@
 | src/evaluate.py (update) | Adds fit_and_score: timed fit on log1p target, expm1 back, train/test scores | Claude via Antigravity |
 | src/stacking.py | Base models, CatBoost wrapper, and TimeSeriesStacker (manual time-aware stacking with RidgeCV) | Claude via Antigravity |
 | notebooks/05_stacking.ipynb | Voting and manual stacking models, StackingRegressor limitation check, meta-model weights, updated results table | Claude via Antigravity |
+| notebooks/06_tuning.ipynb | Tunes Random Forest, XGBoost and CatBoost with GridSearchCV + TimeSeriesSplit(5), saves best_params.json and results_tuned.csv | Claude via Antigravity |
