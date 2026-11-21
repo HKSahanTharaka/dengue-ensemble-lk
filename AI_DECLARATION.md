@@ -26,3 +26,4 @@
 | src/train_final.py | Trains final tuned Pipeline, saves best_model.pkl, model_meta.json, test_predictions.csv, results_final.csv | Claude via Antigravity |
 | app/app.py | Streamlit 4-tab dashboard loading best_model.pkl, metadata, and results (no retraining) | Claude via Antigravity |
 | app/interpretation.md | Editable 3-bullet interpretation displayed in Tab 3 of the Streamlit app | Claude via Antigravity |
+| README.md (final) | Complete project README grounded in real model metadata, results_final.csv, and notebook outputs | Claude via Antigravity |
