@@ -17,3 +17,5 @@
 | notebooks/03_split_and_baseline.ipynb | Runs the split, CV folds, two naive baselines and a log1p demo | Claude via Antigravity |
 | notebooks/04_models.ipynb | Trains 6 default ensemble models (bagging, RF, GBM, XGBoost, CatBoost, AdaBoost), scores them with the baselines | Claude via Antigravity |
 | src/evaluate.py (update) | Adds fit_and_score: timed fit on log1p target, expm1 back, train/test scores | Claude via Antigravity |
+| src/stacking.py | Base models, CatBoost wrapper, and TimeSeriesStacker (manual time-aware stacking with RidgeCV) | Claude via Antigravity |
+| notebooks/05_stacking.ipynb | Voting and manual stacking models, StackingRegressor limitation check, meta-model weights, updated results table | Claude via Antigravity |
