@@ -1,0 +1,12 @@
+# AI-GENERATED (Claude via Antigravity)
+# Raw data is never committed (large, and licence belongs to the Kaggle author)
+data/raw/
+
+# Python environment and caches
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Git cannot filter by file size, so put any model over 50 MB in this folder
+models/large/

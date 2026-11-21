@@ -1,0 +1,13 @@
+# AI-GENERATED (Claude via Antigravity)
+pandas
+numpy
+scikit-learn
+xgboost
+catboost
+statsmodels
+matplotlib
+seaborn
+shap
+joblib
+streamlit
+jupyter
