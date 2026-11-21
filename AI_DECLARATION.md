@@ -8,3 +8,5 @@
 | AI_DECLARATION.md | This table of AI-written files | Claude via Antigravity |
 | README.md | Project title, data source stub and setup instructions | Claude via Antigravity |
 | notebooks/01_data_audit.ipynb | Audits the raw CSV: shape, gaps, plots, correlations, leakage-risk table (not yet run) | Claude via Antigravity |
+| src/features.py | Builds next-week target, case/climate lags, past-only rolling stats, seasonality; drops leaky columns | Claude via Antigravity |
+| notebooks/02_features.ipynb | Runs features.py, tests lag and no-leak (asserts), saves data/processed/features.csv | Claude via Antigravity |
