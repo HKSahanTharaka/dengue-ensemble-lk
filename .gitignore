@@ -10,3 +10,6 @@ __pycache__/
 
 # Git cannot filter by file size, so put any model over 50 MB in this folder
 models/large/
+
+# CatBoost writes log files here when it trains
+catboost_info/
