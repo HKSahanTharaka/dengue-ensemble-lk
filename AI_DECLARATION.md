@@ -12,3 +12,6 @@
 | notebooks/02_features.ipynb | Runs features.py, tests lag and no-leak (asserts), saves data/processed/features.csv | Claude via Antigravity |
 | src/features.py (update) | Adds this-week cases and weather (lag 0) and rolling stats that include this week; still no future data | Claude via Antigravity |
 | notebooks/02_features.ipynb (update) | Verifies cases_zscore uses all years (leak), stronger no-future-data tests, saves 51-feature table | Claude via Antigravity |
+| src/split.py | Time-based train/test split, district one-hot ColumnTransformer, TimeSeriesSplit with fold date table | Claude via Antigravity |
+| src/evaluate.py | MAE, MSE, RMSE, R2 and median absolute error on the original case scale; expm1 helper | Claude via Antigravity |
+| notebooks/03_split_and_baseline.ipynb | Runs the split, CV folds, two naive baselines and a log1p demo | Claude via Antigravity |
