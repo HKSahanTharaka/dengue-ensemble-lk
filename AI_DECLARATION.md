@@ -23,3 +23,4 @@
 | notebooks/07_evaluation.ipynb | Final model comparison, 4-district plots, residual analysis, outbreak vs normal error, classification metrics, and 95% block bootstrap CIs | Claude via Antigravity |
 | notebooks/08_interpretation.ipynb | Learning curves, built-in/permutation/SHAP feature importance, grouped importance, SHAP dependence plots, and draft interpretation | Claude via Antigravity |
 | notebooks/09_hybrid.ipynb | Hybrid ExponentialSmoothing + Random Forest on residuals vs RF alone on top 5 districts | Claude via Antigravity |
+| src/train_final.py | Trains final tuned Pipeline, saves best_model.pkl, model_meta.json, test_predictions.csv, results_final.csv | Claude via Antigravity |
