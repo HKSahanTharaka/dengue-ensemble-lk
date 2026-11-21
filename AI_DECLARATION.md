@@ -15,3 +15,5 @@
 | src/split.py | Time-based train/test split, district one-hot ColumnTransformer, TimeSeriesSplit with fold date table | Claude via Antigravity |
 | src/evaluate.py | MAE, MSE, RMSE, R2 and median absolute error on the original case scale; expm1 helper | Claude via Antigravity |
 | notebooks/03_split_and_baseline.ipynb | Runs the split, CV folds, two naive baselines and a log1p demo | Claude via Antigravity |
+| notebooks/04_models.ipynb | Trains 6 default ensemble models (bagging, RF, GBM, XGBoost, CatBoost, AdaBoost), scores them with the baselines | Claude via Antigravity |
+| src/evaluate.py (update) | Adds fit_and_score: timed fit on log1p target, expm1 back, train/test scores | Claude via Antigravity |
