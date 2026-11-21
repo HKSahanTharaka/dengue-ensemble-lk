@@ -20,3 +20,4 @@
 | src/stacking.py | Base models, CatBoost wrapper, and TimeSeriesStacker (manual time-aware stacking with RidgeCV) | Claude via Antigravity |
 | notebooks/05_stacking.ipynb | Voting and manual stacking models, StackingRegressor limitation check, meta-model weights, updated results table | Claude via Antigravity |
 | notebooks/06_tuning.ipynb | Tunes Random Forest, XGBoost and CatBoost with GridSearchCV + TimeSeriesSplit(5), saves best_params.json and results_tuned.csv | Claude via Antigravity |
+| notebooks/07_evaluation.ipynb | Final model comparison, 4-district plots, residual analysis, outbreak vs normal error, classification metrics, and 95% block bootstrap CIs | Claude via Antigravity |
